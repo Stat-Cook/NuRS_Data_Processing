@@ -37,9 +37,14 @@ class EncodedLabelData:
         """
         name = column.name
         enc = LabelBinarizer()
+        binarized = enc.fit_transform(column.fillna("NaN"))
+        if len(enc.classes_) == 2:
+            classes = [enc.classes_[1]]
+        else:
+            classes = enc.classes_
         return pd.DataFrame(
-            enc.fit_transform(column.fillna("NaN")),
-            columns=[(name, i) for i in enc.classes_]
+            binarized,
+            columns=[(name, i) for i in classes]
         )
 
     def _initialize_values(self):
