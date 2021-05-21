@@ -6,7 +6,7 @@ from .missing_classifier import MissingClassifier
 from .missing_results import MissingResults
 
 
-def mine_missing_features(file_path: str, sheet_name=0) -> MissingResults:
+def mine_missing_from_file(file_path: str, sheet_name=0) -> MissingResults:
     """
     Mine a data set loaded from file for patterns of missingness.
     Parameters
@@ -22,8 +22,10 @@ def mine_missing_features(file_path: str, sheet_name=0) -> MissingResults:
     """
     if file_path.lower().endswith(".csv"):
         data = pd.read_csv(file_path)
-    if file_path.lower().endswith((".xls", ".xlsx")):
+    elif file_path.lower().endswith((".xls", ".xlsx")):
         data = pd.read_excel(file_path, sheet_name=sheet_name)
+    else:
+        raise TypeError("Expecting file of type csv or xls(x).  Check file type")
 
     missing_classifier = MissingClassifier(data)
     return missing_classifier.test_all_columns()
