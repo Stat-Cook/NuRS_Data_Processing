@@ -27,7 +27,7 @@ def metrics(data: pd.DataFrame, missing_col: str, feature_col: str, ci_width: fl
 
     Returns
     -------
-    dict("Feature", "Missing", "Lower", "Upper")
+    dict
     """
     missing_sum = data[missing_col].isna().sum()
     n_cases, _ = data.shape
@@ -67,7 +67,7 @@ def group_vector(data, column, n_bins=10):
 
     Returns
     -------
-
+    pd.Series
     """
     if data.dtypes[column] == "object":
         return data[column].fillna("NaN")
@@ -97,22 +97,26 @@ def missing_chart(data, missing_col, feature_col):
         summary["Missing"],
         yerr=summary[["Lower", "Upper"]].values.T
     )
-    plt.hlines(
+    p = plt.hlines(
         metrics(data, missing_col, feature_col)["Missing"],
         xmin=min(summary["Feature"]),
         xmax=max(summary["Feature"]),
         linestyles="dashed"
     )
+    return p
 
 
 if __name__ == '__main__':
-    f = pd.read_csv("cli/tests/test_data/missing_data.csv")
+    f = pd.read_csv("tests/test_data/missing_data.csv")
 
-    missing_chart(f, "C", "A")
+    p = missing_chart(f, "C", "A")
+    print(type(p))
     plt.show()
 
-    missing_chart(f, "C", "B")
     plt.show()
-
-    missing_chart(f, "C", "D")
-    plt.show()
+    #
+    # missing_chart(f, "C", "B")
+    # plt.show()
+    #
+    # missing_chart(f, "C", "D")
+    # plt.show()
