@@ -1,0 +1,8 @@
+pandas
+sklearn
+sqlalchemy
+pyyaml
+matplotlib
+mysql
+tabulate
+pytest
